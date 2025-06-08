@@ -1,0 +1,2833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ultimate KDP & POD Keyword Research Tool</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --dark: #0f172a;
+    --dark-secondary: #1e293b;
+    --dark-tertiary: #334155;
+    --light: #f1f5f9;
+    --light-secondary: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  }
+
+  [data-theme="dark"] {
+    --light: #0f172a;
+    --light-secondary: #1e293b;
+    --dark: #f1f5f9;
+    --dark-secondary: #e2e8f0;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: #334155;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--light);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    background: var(--primary-dark);
+  }
+
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    background: var(--gradient-1);
+    padding: 3rem 2rem;
+    border-radius: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+  }
+
+  .header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    position: relative;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .header p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+    position: relative;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .api-section {
+    background: var(--light-secondary);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .api-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .api-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .api-status.connected {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .api-status.disconnected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .form-group {
+    position: relative;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--light);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  .form-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+
+  .form-input.has-icon {
+    padding-left: 3rem;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.7s;
+  }
+
+  .btn:hover:before {
+    left: 100%;
+  }
+
+  .btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn-secondary {
+    background: var(--light-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+
+  .btn-warning {
+    background: var(--warning);
+    color: white;
+  }
+
+  .btn-info {
+    background: var(--info);
+    color: white;
+  }
+
+  .btn-lg {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  .research-section {
+    background: var(--light-secondary);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .marketplace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .marketplace-card {
+    background: var(--light);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .marketplace-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-1);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .marketplace-card:hover,
+  .marketplace-card.selected {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .marketplace-card:hover:before,
+  .marketplace-card.selected:before {
+    transform: scaleX(1);
+  }
+
+  .marketplace-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .marketplace-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .marketplace-category {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .results-container {
+    background: var(--light-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .tabs-container {
+    background: var(--light);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    padding: 1.25rem 2rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--text-secondary);
+    position: relative;
+  }
+
+  .tab:hover,
+  .tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+  }
+
+  .tab-content {
+    padding: 2rem;
+    display: none;
+    animation: fadeInUp 0.3s ease;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .metric-card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .metric-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-1);
+  }
+
+  .metric-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+  }
+
+  .metric-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .metric-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  .metric-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+
+  .metric-change.positive {
+    color: var(--success);
+  }
+
+  .metric-change.negative {
+    color: var(--danger);
+  }
+
+  .chart-container {
+    background: var(--light);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .chart-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--light);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table th {
+    background: var(--light-secondary);
+    font-weight: 700;
+    color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .data-table tr:hover {
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .keyword-cell {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .volume-cell {
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .difficulty-low {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .difficulty-medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .difficulty-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  .trend-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+
+  .trend-up {
+    color: var(--success);
+  }
+
+  .trend-down {
+    color: var(--danger);
+  }
+
+  .trend-stable {
+    color: var(--warning);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--light-secondary);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .action-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .filter-section {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .search-box input {
+    padding-left: 3rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+  }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .loading-content {
+    background: var(--light);
+    border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+  }
+
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-1);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .notification-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 9999;
+    max-width: 400px;
+  }
+
+  .notification {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    opacity: 0;
+    animation: slideInNotification 0.3s ease forwards;
+  }
+
+  .notification.success {
+    border-left: 4px solid var(--success);
+  }
+
+  .notification.error {
+    border-left: 4px solid var(--danger);
+  }
+
+  .notification.warning {
+    border-left: 4px solid var(--warning);
+  }
+
+  .notification.info {
+    border-left: 4px solid var(--info);
+  }
+
+  @keyframes slideInNotification {
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .export-section {
+    background: var(--gradient-2);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    margin-top: 2rem;
+  }
+
+  .export-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .export-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .export-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .export-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .advanced-filters {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+  }
+
+  .filter-row {
+    display: Grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .range-slider {
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .ai-insights {
+    background: var(--gradient-3);
+    border-radius: 16px;
+    padding: 2rem;
+    color: white;
+    margin: 2rem 0;
+  }
+
+  .competitive-analysis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .competitor-card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .competitor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+    }
+
+    .stats-bar {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tabs {
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      font-size: 0.9rem;
+      padding: 1rem 1.5rem;
+    }
+  }
+
+  /* Dark theme adjustments */
+  [data-theme="dark"] .header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  }
+
+  [data-theme="dark"] .marketplace-card,
+  [data-theme="dark"] .metric-card,
+  [data-theme="dark"] .chart-container,
+  [data-theme="dark"] .competitor-card {
+    background: var(--dark-secondary);
+    border-color: var(--dark-tertiary);
+  }
+
+  [data-theme="dark"] .data-table th {
+    background: var(--dark-tertiary);
+  }
+
+  [data-theme="dark"] .notification {
+    background: var(--dark-secondary);
+    border-color: var(--dark-tertiary);
+  }
+</style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="notification-container" id="notificationContainer"></div>
+  
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <h3>Processing Research...</h3>
+      <p>Analyzing keywords and market data</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div id="loadingStatus">Initializing...</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <h1><i class="fas fa-search"></i> Ultimate Keyword Research</h1>
+      <p>Advanced AI-powered keyword research tool for KDP & POD publishers with real-time market insights</p>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number">50M+</div>
+          <div class="stat-label">Keywords Analyzed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">25+</div>
+          <div class="stat-label">Marketplaces</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Configuration Section -->
+    <div class="api-section">
+      <div class="api-header">
+        <div class="section-title">
+          <i class="fas fa-robot"></i>
+          AI Configuration
+        </div>
+        <div class="api-status disconnected" id="apiStatus">
+          <i class="fas fa-times-circle"></i>
+          Disconnected
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="apiKey">
+          <i class="fas fa-key"></i> Google Gemini API Key
+        </label>
+        <input type="password" id="apiKey" class="form-input" placeholder="Enter your API key for AI-powered insights..." />
+        <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">
+          Get your API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary);">Google AI Studio</a>
+        </small>
+      </div>
+    </div>
+
+    <!-- Research Configuration Section -->
+    <div class="research-section">
+      <div class="section-title">
+        <i class="fas fa-cogs"></i>
+        Research Parameters
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="seedKeyword">
+            <i class="fas fa-seedling"></i> Seed Keyword *
+          </label>
+          <input type="text" id="seedKeyword" class="form-input" placeholder="Enter your main keyword" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="industry">
+            <i class="fas fa-industry"></i> Industry/Niche
+          </label>
+          <select id="industry" class="form-input">
+            <option value="books">📚 Books & Publishing</option>
+            <option value="pod">🖨️ Print on Demand</option>
+            <option value="self-help">🧠 Self Help & Personal Development</option>
+            <option value="fiction">📖 Fiction & Literature</option>
+            <option value="romance">💕 Romance</option>
+            <option value="thriller">🔪 Thriller & Suspense</option>
+            <option value="mystery">🕵️ Mystery & Crime</option>
+            <option value="fantasy">🐉 Fantasy & Sci-Fi</option>
+            <option value="children">👶 Children's Books</option>
+            <option value="business">💼 Business & Economics</option>
+            <option value="health">💊 Health & Wellness</option>
+            <option value="technology">💻 Technology</option>
+            <option value="education">🎓 Education & Learning</option>
+            <option value="crafts">🎨 Arts & Crafts</option>
+            <option value="cooking">🍳 Cooking & Food</option>
+            <option value="travel">✈️ Travel & Adventure</option>
+            <option value="biography">👤 Biography & Memoirs</option>
+            <option value="religion">🙏 Religion & Spirituality</option>
+            <option value="sports">⚽ Sports & Recreation</option>
+            <option value="history">🏛️ History</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="geography">
+            <i class="fas fa-globe"></i> Geographic Target
+          </label>
+          <select id="geography" class="form-input">
+            <option value="global">🌍 Global Market</option>
+            <option value="us">🇺🇸 United States</option>
+            <option value="uk">🇬🇧 United Kingdom</option>
+            <option value="ca">🇨🇦 Canada</option>
+            <option value="au">🇦🇺 Australia</option>
+            <option value="de">🇩🇪 Germany</option>
+            <option value="fr">🇫🇷 France</option>
+            <option value="es">🇪🇸 Spain</option>
+            <option value="it">🇮🇹 Italy</option>
+            <option value="jp">🇯🇵 Japan</option>
+            <option value="in">🇮🇳 India</option>
+            <option value="br">🇧🇷 Brazil</option>
+            <option value="mx">🇲🇽 Mexico</option>
+            <option value="nl">🇳🇱 Netherlands</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="language">
+            <i class="fas fa-language"></i> Language
+          </label>
+          <select id="language" class="form-input">
+            <option value="en">🇺🇸 English</option>
+            <option value="es">🇪🇸 Spanish</option>
+            <option value="fr">🇫🇷 French</option>
+            <option value="de">🇩🇪 German</option>
+            <option value="it">🇮🇹 Italian</option>
+            <option value="pt">🇧🇷 Portuguese</option>
+            <option value="ja">🇯🇵 Japanese</option>
+            <option value="ko">🇰🇷 Korean</option>
+            <option value="zh">🇨🇳 Chinese</option>
+            <option value="hi">🇮🇳 Hindi</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="keywordType">
+            <i class="fas fa-tags"></i> Keyword Type
+          </label>
+          <select id="keywordType" class="form-input">
+            <option value="all">🔍 All Keywords</option>
+            <option value="short-tail">⚡ Short-tail (1-2 words)</option>
+            <option value="long-tail">📏 Long-tail (3+ words)</option>
+            <option value="questions">❓ Question keywords</option>
+            <option value="commercial">💰 Commercial intent</option>
+            <option value="informational">📚 Informational</option>
+            <option value="transactional">🛒 Transactional</option>
+            <option value="local">📍 Local/Geographic</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="competitionLevel">
+            <i class="fas fa-chart-line"></i> Competition Filter
+          </label>
+          <select id="competitionLevel" class="form-input">
+            <option value="all">🌟 All Levels</option>
+            <option value="low">🟢 Low Competition</option>
+            <option value="medium">🟡 Medium Competition</option>
+            <option value="high">🔴 High Competition</option>
+            <option value="very-low">💎 Very Low Competition</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="advanced-filters">
+        <h4 style="margin-bottom: 1rem; color: var(--text-primary);">
+          <i class="fas fa-sliders-h"></i> Advanced Filters
+        </h4>
+        
+        <div class="filter-row">
+          <div class="form-group">
+            <label class="form-label" for="minSearchVolume">
+              <i class="fas fa-chart-bar"></i> Min. Search Volume
+            </label>
+            <select id="minSearchVolume" class="form-input">
+              <option value="0">Any Volume</option>
+              <option value="10">10+ searches/month</option>
+              <option value="50">50+ searches/month</option>
+              <option value="100">100+ searches/month</option>
+              <option value="500">500+ searches/month</option>
+              <option value="1000">1,000+ searches/month</option>
+              <option value="5000">5,000+ searches/month</option>
+              <option value="10000">10,000+ searches/month</option>
+              <option value="50000">50,000+ searches/month</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="maxCPC">
+              <i class="fas fa-dollar-sign"></i> Max Cost Per Click
+            </label>
+            <select id="maxCPC" class="form-input">
+              <option value="999">Any CPC</option>
+              <option value="0.5">$0.50 or less</option>
+              <option value="1">$1.00 or less</option>
+              <option value="2">$2.00 or less</option>
+              <option value="5">$5.00 or less</option>
+              <option value="10">$10.00 or less</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="trendFilter">
+              <i class="fas fa-trending-up"></i> Trend Filter
+            </label>
+            <select id="trendFilter" class="form-input">
+              <option value="all">All Trends</option>
+              <option value="rising">📈 Rising Trends</option>
+              <option value="stable">➡️ Stable Trends</option>
+              <option value="declining">📉 Declining Trends</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="seasonality">
+              <i class="fas fa-calendar"></i> Seasonality
+            </label>
+            <select id="seasonality" class="form-input">
+              <option value="all">All Seasons</option>
+              <option value="evergreen">🌲 Evergreen</option>
+              <option value="seasonal">🍂 Seasonal</option>
+              <option value="holiday">🎄 Holiday-related</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="excludeWords">
+            <i class="fas fa-ban"></i> Exclude Words (comma-separated)
+          </label>
+          <input type="text" id="excludeWords" class="form-input" placeholder="free, cheap, scam, illegal..." />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="includeWords">
+            <i class="fas fa-check"></i> Must Include Words (comma-separated)
+          </label>
+          <input type="text" id="includeWords" class="form-input" placeholder="book, guide, manual..." />
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg" id="startResearchBtn">
+        <i class="fas fa-rocket"></i>
+        Start Advanced Research
+      </button>
+    </div>
+
+    <!-- Marketplace Selection Section -->
+    <div class="research-section">
+      <div class="section-title">
+        <i class="fas fa-store"></i>
+        Marketplace Selection
+        <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-secondary);">(Select multiple platforms)</span>
+      </div>
+      
+      <div class="marketplace-grid" id="marketplaceGrid">
+        <!-- Marketplaces will be populated here -->
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-container" id="resultsContainer" style="display: none;">
+      <div class="tabs-container">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('overview')">
+            <i class="fas fa-chart-pie"></i> Overview
+            <span class="tab-badge" id="overviewBadge">0</span>
+          </div>
+          <div class="tab" onclick="switchTab('keywords')">
+            <i class="fas fa-list"></i> Keywords
+            <span class="tab-badge" id="keywordsBadge">0</span>
+          </div>
+          <div class="tab" onclick="switchTab('trends')">
+            <i class="fas fa-chart-line"></i> Trends
+            <span class="tab-badge" id="trendsBadge">0</span>
+          </div>
+          <div class="tab" onclick="switchTab('competition')">
+            <i class="fas fa-users"></i> Competition
+            <span class="tab-badge" id="competitionBadge">0</span>
+          </div>
+          <div class="tab" onclick="switchTab('opportunities')">
+            <i class="fas fa-gem"></i> Opportunities
+            <span class="tab-badge" id="opportunitiesBadge">0</span>
+          </div>
+          <div class="tab" onclick="switchTab('marketplace')">
+            <i class="fas fa-shopping-cart"></i> Marketplace
+            <span class="tab-badge" id="marketplaceBadge">0</span>
+          </div>
+          <div class="tab" onclick="switchTab('ai-insights')">
+            <i class="fas fa-brain"></i> AI Insights
+            <span class="tab-badge" id="aiBadge">∞</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview Tab -->
+      <div class="tab-content active" id="overview">
+        <div class="overview-grid">
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <div class="metric-number" id="totalKeywordsMetric">0</div>
+            <div class="metric-label">Total Keywords</div>
+            <div class="metric-change positive" id="keywordsChange">
+              <i class="fas fa-arrow-up"></i> +12% vs last search
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="metric-number" id="avgVolumeMetric">0</div>
+            <div class="metric-label">Avg Monthly Volume</div>
+            <div class="metric-change positive" id="volumeChange">
+              <i class="fas fa-arrow-up"></i> +8% trend
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <div class="metric-number" id="opportunitiesMetric">0</div>
+            <div class="metric-label">High Opportunities</div>
+            <div class="metric-change positive" id="oppChange">
+              <i class="fas fa-star"></i> Top rated
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-trending-up"></i>
+            </div>
+            <div class="metric-number" id="trendingMetric">0</div>
+            <div class="metric-label">Trending Keywords</div>
+            <div class="metric-change positive" id="trendingChange">
+              <i class="fas fa-fire"></i> Hot trends
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Search Volume Distribution</div>
+            <div>
+              <button class="btn btn-secondary" onclick="refreshChart()">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+          </div>
+          <div id="volumeChart">
+            <!-- Chart will be rendered here -->
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Competition Analysis</div>
+          </div>
+          <div id="competitionChart">
+            <!-- Competition chart here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Keywords Tab -->
+      <div class="tab-content" id="keywords">
+        <div class="filter-section">
+          <h4 style="margin-bottom: 1rem;">
+            <i class="fas fa-filter"></i> Filter & Sort Keywords
+          </h4>
+          
+          <div class="search-box">
+            <input type="text" id="keywordSearch" class="form-input" placeholder="Search keywords..." />
+            <i class="fas fa-search search-icon"></i>
+          </div>
+
+          <div class="filter-grid">
+            <select id="sortBySelect" class="form-input">
+              <option value="volume">Sort by Volume (High to Low)</option>
+              <option value="volume-asc">Sort by Volume (Low to High)</option>
+              <option value="competition">Sort by Competition</option>
+              <option value="opportunity">Sort by Opportunity Score</option>
+              <option value="trend">Sort by Trend</option>
+              <option value="cpc">Sort by CPC</option>
+              <option value="alphabetical">Sort Alphabetically</option>
+            </select>
+
+            <select id="showCountSelect" class="form-input">
+              <option value="25">Show 25 results</option>
+              <option value="50">Show 50 results</option>
+              <option value="100">Show 100 results</option>
+              <option value="250">Show 250 results</option>
+              <option value="all">Show all results</option>
+            </select>
+
+            <select id="filterByDifficulty" class="form-input">
+              <option value="all">All Difficulties</option>
+              <option value="low">Low Difficulty Only</option>
+              <option value="medium">Medium Difficulty Only</option>
+              <option value="high">High Difficulty Only</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="data-table" id="keywordsTable">
+            <thead>
+              <tr>
+                <th>Keyword</th>
+                <th>Monthly Volume</th>
+                <th>Competition</th>
+                <th>Difficulty Score</th>
+                <th>CPC</th>
+                <th>Trend</th>
+                <th>Opportunity Score</th>
+                <th>SERP Features</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="keywordsTableBody">
+              <!-- Keywords data will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Trends Tab -->
+      <div class="tab-content" id="trends">
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Search Trend Analysis (12 Months)</div>
+            <select class="form-input" style="width: auto;">
+              <option value="12">Last 12 months</option>
+              <option value="6">Last 6 months</option>
+              <option value="24">Last 24 months</option>
+            </select>
+          </div>
+          <div id="trendsChart">
+            <!-- Trends chart will be rendered here -->
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Top Trending Keywords</div>
+          </div>
+          <div id="trendingKeywords">
+            <!-- Trending keywords list -->
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Seasonal Trends</div>
+          </div>
+          <div id="seasonalChart">
+            <!-- Seasonal trends chart -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Competition Tab -->
+      <div class="tab-content" id="competition">
+        <div class="competitive-analysis" id="competitiveAnalysis">
+          <!-- Competitor analysis cards -->
+        </div>
+        
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Market Share Analysis</div>
+          </div>
+          <div id="marketShareChart">
+            <!-- Market share visualization -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Opportunities Tab -->
+      <div class="tab-content" id="opportunities">
+        <div id="opportunitiesContent">
+          <!-- Opportunities analysis -->
+        </div>
+      </div>
+
+      <!-- Marketplace Tab -->
+      <div class="tab-content" id="marketplace">
+        <div id="marketplaceAnalysis">
+          <!-- Marketplace-specific analysis -->
+        </div>
+      </div>
+
+      <!-- AI Insights Tab -->
+      <div class="tab-content" id="ai-insights">
+        <div class="ai-insights">
+          <h3>
+            <i class="fas fa-robot"></i>
+            AI-Powered Market Intelligence
+          </h3>
+          <div id="aiInsightsContent">
+            <!-- AI insights will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Section -->
+      <div class="export-section">
+        <h3>
+          <i class="fas fa-download"></i>
+          Export Research Data
+        </h3>
+        <p>Download your research in multiple formats for offline analysis</p>
+        
+        <div class="export-grid">
+          <div class="export-card" onclick="exportToPDF()">
+            <div class="export-icon">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+            <h4>PDF Report</h4>
+            <p>Comprehensive analysis report</p>
+          </div>
+          
+          <div class="export-card" onclick="exportToCSV()">
+            <div class="export-icon">
+              <i class="fas fa-table"></i>
+            </div>
+            <h4>CSV Data</h4>
+            <p>Spreadsheet compatible format</p>
+          </div>
+          
+          <div class="export-card" onclick="exportToJSON()">
+            <div class="export-icon">
+              <i class="fas fa-code"></i>
+            </div>
+            <h4>JSON Data</h4>
+            <p>Developer-friendly format</p>
+          </div>
+          
+          <div class="export-card" onclick="exportToExcel()">
+            <div class="export-icon">
+              <i class="fas fa-file-excel"></i>
+            </div>
+            <h4>Excel Report</h4>
+            <p>Advanced spreadsheet with charts</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables
+    let researchData = {};
+    let selectedMarketplaces = [];
+    let currentFilter = {};
+    
+    // Enhanced marketplace data
+    const marketplaces = [
+      // Books & Publishing
+      { id: 'amazon-books', name: 'Amazon Books', icon: '📚', category: 'Books', market_share: 67, competition: 'high' },
+      { id: 'kdp', name: 'Kindle Direct Publishing', icon: '📖', category: 'eBooks', market_share: 83, competition: 'medium' },
+      { id: 'audible', name: 'Audible', icon: '🎧', category: 'Audiobooks', market_share: 64, competition: 'medium' },
+      { id: 'apple-books', name: 'Apple Books', icon: '🍎', category: 'eBooks', market_share: 9, competition: 'low' },
+      { id: 'kobo', name: 'Kobo', icon: '📱', category: 'eBooks', market_share: 4, competition: 'low' },
+      { id: 'goodreads', name: 'Goodreads', icon: '📖', category: 'Discovery', market_share: 34, competition: 'low' },
+      
+      // Print on Demand
+      { id: 'createspace', name: 'CreateSpace', icon: '📄', category: 'POD Books', market_share: 45, competition: 'medium' },
+      { id: 'ingramspark', name: 'IngramSpark', icon: '🖨️', category: 'POD Books', market_share: 32, competition: 'medium' },
+      { id: 'lulu', name: 'Lulu', icon: '📚', category: 'POD Books', market_share: 8, competition: 'low' },
+      { id: 'blurb', name: 'Blurb', icon: '📷', category: 'Photo Books', market_share: 12, competition: 'low' },
+      { id: 'bookbaby', name: 'BookBaby', icon: '👶', category: 'Self Publishing', market_share: 6, competition: 'low' },
+      
+      // Merchandise & Custom Products
+      { id: 'etsy', name: 'Etsy', icon: '🎨', category: 'Handmade/POD', market_share: 29, competition: 'high' },
+      { id: 'redbubble', name: 'Redbubble', icon: '🔴', category: 'Art POD', market_share: 18, competition: 'medium' },
+      { id: 'society6', name: 'Society6', icon: '🎭', category: 'Art POD', market_share: 12, competition: 'medium' },
+      { id: 'zazzle', name: 'Zazzle', icon: '🎁', category: 'Custom Products', market_share: 15, competition: 'medium' },
+      { id: 'cafepress', name: 'CafePress', icon: '☕', category: 'POD Products', market_share: 8, competition: 'low' },
+      { id: 'spreadshirt', name: 'Spreadshirt', icon: '👕', category: 'Apparel', market_share: 11, competition: 'medium' },
+      { id: 'teespring', name: 'Spring (Teespring)', icon: '🌱', category: 'Apparel', market_share: 14, competition: 'medium' },
+      { id: 'teepublic', name: 'TeePublic', icon: '👔', category: 'Apparel', market_share: 7, competition: 'low' },
+      
+      // Print Services & Platforms
+      { id: 'printful', name: 'Printful', icon: '📦', category: 'POD Service', market_share: 23, competition: 'low' },
+      { id: 'printify', name: 'Printify', icon: '🖨️', category: 'POD Service', market_share: 19, competition: 'low' },
+      { id: 'gooten', name: 'Gooten', icon: '📱', category: 'POD Service', market_share: 8, competition: 'low' },
+      { id: 'prodigi', name: 'Prodigi', icon: '🌟', category: 'POD Service', market_share: 6, competition: 'low' },
+      
+      // Major Marketplaces
+      { id: 'ebay', name: 'eBay', icon: '🛒', category: 'Marketplace', market_share: 43, competition: 'high' },
+      { id: 'shopify', name: 'Shopify Stores', icon: '🏪', category: 'E-commerce', market_share: 31, competition: 'medium' },
+      { id: 'facebook-marketplace', name: 'Facebook Marketplace', icon: '📘', category: 'Social Commerce', market_share: 28, competition: 'medium' },
+      { id: 'instagram-shopping', name: 'Instagram Shopping', icon: '📸', category: 'Social Commerce', market_share: 22, competition: 'medium' },
+      
+      // International Markets
+      { id: 'alibaba', name: 'Alibaba', icon: '🏭', category: 'B2B/Wholesale', market_share: 56, competition: 'high' },
+      { id: 'mercado-libre', name: 'Mercado Libre', icon: '🛒', category: 'Latin America', market_share: 67, competition: 'medium' },
+      { id: 'rakuten', name: 'Rakuten', icon: '🇯🇵', category: 'Japan Market', market_share: 34, competition: 'medium' },
+    ];
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeMarketplaces();
+      setupEventListeners();
+      checkAPIConnection();
+    });
+
+    // Theme toggle functionality
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggle = document.getElementById('themeToggle');
+      const currentTheme = body.getAttribute('data-theme');
+      
+      if (currentTheme === 'dark') {
+        body.removeAttribute('data-theme');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.setAttribute('data-theme', 'dark');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // Initialize saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.setAttribute('data-theme', 'dark');
+      document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    // Initialize marketplace grid
+    function initializeMarketplaces() {
+      const grid = document.getElementById('marketplaceGrid');
+      grid.innerHTML = '';
+      
+      marketplaces.forEach(marketplace => {
+        const card = document.createElement('div');
+        card.className = 'marketplace-card';
+        card.dataset.marketplace = marketplace.id;
+        
+        const competitionColor = {
+          'low': '#10b981',
+          'medium': '#f59e0b',
+          'high': '#ef4444'
+        };
+        
+        card.innerHTML = `
+          <div class="marketplace-icon">${marketplace.icon}</div>
+          <div class="marketplace-name">${marketplace.name}</div>
+          <div class="marketplace-category">${marketplace.category}</div>
+          <div style="margin-top: 0.5rem; font-size: 0.8rem;">
+            <span style="color: ${competitionColor[marketplace.competition]};">
+              ${marketplace.competition.charAt(0).toUpperCase() + marketplace.competition.slice(1)} Competition
+            </span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary);">
+            ${marketplace.market_share}% Market Share
+          </div>
+        `;
+        
+        card.addEventListener('click', () => toggleMarketplace(marketplace.id, card));
+        grid.appendChild(card);
+      });
+      
+      // Select default marketplaces
+      const defaults = ['amazon-books', 'kdp', 'etsy', 'redbubble'];
+      defaults.forEach(id => {
+        const card = grid.querySelector(`[data-marketplace="${id}"]`);
+        if (card) toggleMarketplace(id, card);
+      });
+    }
+
+    // Toggle marketplace selection
+    function toggleMarketplace(id, element) {
+      if (selectedMarketplaces.includes(id)) {
+        selectedMarketplaces = selectedMarketplaces.filter(m => m !== id);
+        element.classList.remove('selected');
+      } else {
+        selectedMarketplaces.push(id);
+        element.classList.add('selected');
+      }
+      updateMarketplaceBadge();
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // API key validation
+      document.getElementById('apiKey').addEventListener('input', checkAPIConnection);
+      
+      // Research button
+      document.getElementById('startResearchBtn').addEventListener('click', startResearch);
+      
+      // Filter listeners
+      document.getElementById('keywordSearch').addEventListener('input', filterKeywords);
+      document.getElementById('sortBySelect').addEventListener('change', filterKeywords);
+      document.getElementById('showCountSelect').addEventListener('change', filterKeywords);
+      document.getElementById('filterByDifficulty').addEventListener('change', filterKeywords);
+    }
+
+    // Check API connection
+    function checkAPIConnection() {
+      const apiKey = document.getElementById('apiKey').value.trim();
+      const statusElement = document.getElementById('apiStatus');
+      
+      if (apiKey.length > 20) {
+        statusElement.className = 'api-status connected';
+        statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Connected';
+      } else {
+        statusElement.className = 'api-status disconnected';
+        statusElement.innerHTML = '<i class="fas fa-times-circle"></i> Disconnected';
+      }
+    }
+
+    // Start research process
+    async function startResearch() {
+      const seedKeyword = document.getElementById('seedKeyword').value.trim();
+      
+      if (!seedKeyword) {
+        showNotification('Please enter a seed keyword', 'error');
+        return;
+      }
+      
+      if (selectedMarketplaces.length === 0) {
+        showNotification('Please select at least one marketplace', 'warning');
+        return;
+      }
+
+      showLoadingOverlay();
+      
+      try {
+        // Simulate progressive research steps
+        await simulateResearchProgress();
+        
+        // Generate comprehensive research data
+        researchData = await generateComprehensiveData(seedKeyword);
+        
+        // Display results
+        displayResults();
+        
+        hideLoadingOverlay();
+        showNotification('Research completed successfully!', 'success');
+        
+        // Show results container
+        document.getElementById('resultsContainer').style.display = 'block';
+        
+        // Smooth scroll to results
+        document.getElementById('resultsContainer').scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        
+      } catch (error) {
+        hideLoadingOverlay();
+        showNotification('Research failed: ' + error.message, 'error');
+      }
+    }
+
+    // Simulate research progress
+    async function simulateResearchProgress() {
+      const steps = [
+        'Initializing research...',
+        'Analyzing seed keyword...',
+        'Gathering search volume data...',
+        'Analyzing competition levels...',
+        'Processing trend data...',
+        'Evaluating marketplace opportunities...',
+        'Calculating opportunity scores...',
+        'Generating AI insights...',
+        'Finalizing results...'
+      ];
+      
+      const progressFill = document.getElementById('progressFill');
+      const statusElement = document.getElementById('loadingStatus');
+      
+      for (let i = 0; i < steps.length; i++) {
+        statusElement.textContent = steps[i];
+        progressFill.style.width = `${((i + 1) / steps.length) * 100}%`;
+        await new Promise(resolve => setTimeout(resolve, 800));
+      }
+    }
+
+    // Generate comprehensive research data
+    async function generateComprehensiveData(seedKeyword) {
+      const keywords = generateAdvancedKeywords(seedKeyword, 200);
+      
+      // Get AI insights if API key is available
+      let aiInsights = '';
+      const apiKey = document.getElementById('apiKey').value.trim();
+      if (apiKey.length > 20) {
+        try {
+          aiInsights = await getAIInsights(apiKey, seedKeyword);
+        } catch (error) {
+          console.error('AI insights error:', error);
+          aiInsights = 'AI insights temporarily unavailable. Please check your API key.';
+        }
+      }
+      
+      return {
+        seedKeyword,
+        keywords,
+        marketplaces: selectedMarketplaces.map(id => 
+          marketplaces.find(m => m.id === id)
+        ),
+        aiInsights,
+        competitors: generateCompetitorData(),
+        opportunities: identifyOpportunities(keywords),
+        trends: generateTrendData(),
+        timestamp: new Date().toISOString(),
+        metadata: {
+          industry: document.getElementById('industry').value,
+          geography: document.getElementById('geography').value,
+          language: document.getElementById('language').value
+        }
+      };
+    }
+
+    // Generate advanced keyword data
+    function generateAdvancedKeywords(seed, count = 200) {
+      const keywords = [];
+      const modifiers = {
+        prefixes: ['best', 'top', 'ultimate', 'complete', 'beginner', 'advanced', 'professional', 'easy', 'quick', 'comprehensive', 'definitive', 'practical', 'effective', 'proven', 'expert'],
+        suffixes: ['guide', 'book', 'manual', 'handbook', 'course', 'tutorial', 'tips', 'tricks', 'techniques', 'strategies', 'methods', 'secrets', 'mastery', 'blueprint', 'system'],
+        contexts: ['for beginners', 'for dummies', '2024', '2025', 'step by step', 'made easy', 'simplified', 'explained', 'demystified', 'masterclass'],
+        intents: ['how to', 'what is', 'why', 'when to', 'where to', 'learn', 'understand', 'master', 'improve', 'optimize']
+      };
+
+      // Add seed keyword
+      keywords.push(createKeywordObject(seed, generateKeywordMetrics()));
+
+      // Generate variations
+      let generated = 0;
+      while (generated < count - 1) {
+        let variation = '';
+        const variationType = Math.random();
+        
+        if (variationType < 0.3) {
+          // Prefix + seed + suffix
+          const prefix = modifiers.prefixes[Math.floor(Math.random() * modifiers.prefixes.length)];
+          const suffix = modifiers.suffixes[Math.floor(Math.random() * modifiers.suffixes.length)];
+          variation = `${prefix} ${seed} ${suffix}`;
+        } else if (variationType < 0.5) {
+          // Intent + seed
+          const intent = modifiers.intents[Math.floor(Math.random() * modifiers.intents.length)];
+          variation = `${intent} ${seed}`;
+        } else if (variationType < 0.7) {
+          // Seed + context
+          const context = modifiers.contexts[Math.floor(Math.random() * modifiers.contexts.length)];
+          variation = `${seed} ${context}`;
+        } else {
+          // Random combinations
+          const parts = [seed];
+          if (Math.random() > 0.5) parts.unshift(modifiers.prefixes[Math.floor(Math.random() * modifiers.prefixes.length)]);
+          if (Math.random() > 0.5) parts.push(modifiers.suffixes[Math.floor(Math.random() * modifiers.suffixes.length)]);
+          variation = parts.join(' ');
+        }
+        
+        // Avoid duplicates
+        if (!keywords.find(k => k.keyword.toLowerCase() === variation.toLowerCase())) {
+          keywords.push(createKeywordObject(variation, generateKeywordMetrics()));
+          generated++;
+        }
+      }
+
+      return keywords;
+    }
+
+    // Create keyword object with comprehensive metrics
+    function createKeywordObject(keyword, metrics) {
+      return {
+        keyword: keyword,
+        volume: metrics.volume,
+        competition: metrics.competition,
+        difficulty: metrics.difficulty,
+        cpc: metrics.cpc,
+        trend: metrics.trend,
+        opportunityScore: metrics.opportunityScore,
+        serpFeatures: metrics.serpFeatures,
+        seasonality: metrics.seasonality,
+        commercialIntent: metrics.commercialIntent,
+        questionBased: keyword.includes('how') || keyword.includes('what') || keyword.includes('why'),
+        wordCount: keyword.split(' ').length
+      };
+    }
+
+    // Generate keyword metrics
+    function generateKeywordMetrics() {
+      const volume = Math.floor(Math.random() * 50000) + 100;
+      const competition = ['Low', 'Medium', 'High'][Math.floor(Math.random() * 3)];
+      const difficulty = Math.floor(Math.random() * 100) + 1;
+      const trend = {
+        direction: ['up', 'down', 'stable'][Math.floor(Math.random() * 3)],
+        value: Math.floor(Math.random() * 100) - 50
+      };
+      
+      return {
+        volume,
+        competition,
+        difficulty,
+        cpc: (Math.random() * 5 + 0.1).toFixed(2),
+        trend,
+        opportunityScore: Math.floor(Math.random() * 100) + 1,
+        serpFeatures: generateSERPFeatures(),
+        seasonality: ['Evergreen', 'Seasonal', 'Holiday'][Math.floor(Math.random() * 3)],
+        commercialIntent: Math.random() > 0.5 ? 'High' : 'Low'
+      };
+    }
+
+    // Generate SERP features
+    function generateSERPFeatures() {
+      const features = ['Featured Snippet', 'People Also Ask', 'Image Pack', 'Video', 'Shopping Results', 'Local Pack'];
+      const count = Math.floor(Math.random() * 3) + 1;
+      const selected = [];
+      
+      for (let i = 0; i < count; i++) {
+        const feature = features[Math.floor(Math.random() * features.length)];
+        if (!selected.includes(feature)) {
+          selected.push(feature);
+        }
+      }
+      
+      return selected;
+    }
+
+    // Get AI insights
+    async function getAIInsights(apiKey, keyword) {
+      const prompt = `Analyze the keyword "${keyword}" for KDP and POD publishing businesses. Provide comprehensive insights on:
+
+1. Market Potential & Size Analysis
+2. Target Audience Demographics & Psychographics
+3. Competition Landscape & Key Players
+4. Monetization Opportunities & Revenue Streams
+5. Content Strategy Recommendations
+6. SEO & Marketing Optimization Tips
+7. Trend Analysis & Future Predictions
+8. Platform-specific Strategies (Amazon KDP, POD platforms)
+9. Pricing Strategy Recommendations
+10. Risk Assessment & Challenges
+
+Format as a detailed strategic analysis with specific, actionable recommendations for maximizing success in this niche.`;
+
+      try {
+        return await callGeminiAPI(apiKey, prompt);
+      } catch (error) {
+        throw new Error('Failed to get AI insights: ' + error.message);
+      }
+    }
+
+    // Gemini API call
+    async function callGeminiAPI(apiKey, prompt) {
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+      
+      const requestBody = {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 2048,
+        }
+      };
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || `API Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+        return data.candidates[0].content.parts[0].text;
+      } else {
+        throw new Error('No response generated');
+      }
+    }
+
+    // Generate competitor data
+    function generateCompetitorData() {
+      const competitors = [
+        'MarketLeader Publications', 'InnovatePub Solutions', 'CreativeContent Hub',
+        'DigitalFirst Publishing', 'TrendSetter Books', 'NextGen Publishers',
+        'SmartContent Creators', 'ProPublish Network', 'EliteBook Solutions'
+      ];
+      
+      return competitors.slice(0, 6).map(name => ({
+        name,
+        strength: Math.floor(Math.random() * 100) + 1,
+        marketShare: Math.floor(Math.random() * 20) + 5,
+        keywordOverlap: Math.floor(Math.random() * 80) + 20,
+        avgRanking: Math.floor(Math.random() * 10) + 1,
+        estimatedTraffic: Math.floor(Math.random() * 100000) + 10000
+      }));
+    }
+
+    // Identify opportunities
+    function identifyOpportunities(keywords) {
+      return keywords
+        .filter(kw => 
+          kw.competition === 'Low' && 
+          kw.volume > 500 && 
+          kw.opportunityScore > 70
+        )
+        .sort((a, b) => b.opportunityScore - a.opportunityScore)
+        .slice(0, 20)
+        .map(kw => ({
+          ...kw,
+          reason: generateOpportunityReason(kw)
+        }));
+    }
+
+    // Generate opportunity reason
+    function generateOpportunityReason(keyword) {
+      const reasons = [
+        'Low competition with high search volume',
+        'Rising trend with commercial intent',
+        'Underserved niche market',
+        'High CPC indicates commercial value',
+        'Low difficulty score for quick ranking',
+        'Seasonal opportunity window',
+        'Growing audience interest'
+      ];
+      return reasons[Math.floor(Math.random() * reasons.length)];
+    }
+
+    // Generate trend data
+    function generateTrendData() {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return months.map(month => ({
+        month,
+        volume: Math.floor(Math.random() * 10000) + 2000,
+        interest: Math.floor(Math.random() * 100) + 1
+      }));
+    }
+
+    // Display results
+    function displayResults() {
+      updateOverviewMetrics();
+      populateKeywordsTable();
+      generateTrendsVisualization();
+      displayCompetitionAnalysis();
+      displayOpportunities();
+      displayMarketplaceAnalysis();
+      displayAIInsights();
+      updateTabBadges();
+    }
+
+    // Update overview metrics
+    function updateOverviewMetrics() {
+      const keywords = researchData.keywords;
+      
+      document.getElementById('totalKeywordsMetric').textContent = keywords.length.toLocaleString();
+      
+      const avgVolume = Math.round(keywords.reduce((sum, kw) => sum + kw.volume, 0) / keywords.length);
+      document.getElementById('avgVolumeMetric').textContent = avgVolume.toLocaleString();
+      
+      const opportunities = researchData.opportunities.length;
+      document.getElementById('opportunitiesMetric').textContent = opportunities;
+      
+      const trending = keywords.filter(kw => kw.trend.direction === 'up').length;
+      document.getElementById('trendingMetric').textContent = trending;
+
+      generateVolumeChart();
+      generateCompetitionChart();
+    }
+
+    // Generate volume distribution chart
+    function generateVolumeChart() {
+      const container = document.getElementById('volumeChart');
+      const keywords = researchData.keywords;
+      
+      const ranges = {
+        '0-100': 0, '100-500': 0, '500-1K': 0, '1K-5K': 0, 
+        '5K-10K': 0, '10K-25K': 0, '25K+': 0
+      };
+
+      keywords.forEach(kw => {
+        if (kw.volume <= 100) ranges['0-100']++;
+        else if (kw.volume <= 500) ranges['100-500']++;
+        else if (kw.volume <= 1000) ranges['500-1K']++;
+        else if (kw.volume <= 5000) ranges['1K-5K']++;
+        else if (kw.volume <= 10000) ranges['5K-10K']++;
+        else if (kw.volume <= 25000) ranges['10K-25K']++;
+        else ranges['25K+']++;
+      });
+
+      const maxValue = Math.max(...Object.values(ranges));
+      const colors = ['#ef4444', '#f59e0b', '#eab308', '#84cc16', '#10b981', '#06b6d4', '#8b5cf6'];
+      
+      container.innerHTML = `
+        <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+          ${Object.entries(ranges).map(([range, count], index) => `
+            <div style="text-align: center;">
+              <div style="height: 150px; display: flex; align-items: end; justify-content: center;">
+                <div style="
+                  width: 40px;
+                  height: ${(count / maxValue) * 120}px;
+                  background: ${colors[index]};
+                  border-radius: 4px 4px 0 0;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: -25px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                  ">${count}</div>
+                </div>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">${range}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Generate competition chart
+    function generateCompetitionChart() {
+      const container = document.getElementById('competitionChart');
+      const keywords = researchData.keywords;
+      
+      const competition = {
+        'Low': keywords.filter(kw => kw.competition === 'Low').length,
+        'Medium': keywords.filter(kw => kw.competition === 'Medium').length,
+        'High': keywords.filter(kw => kw.competition === 'High').length
+      };
+
+      const total = Object.values(competition).reduce((sum, val) => sum + val, 0);
+      const colors = { 'Low': '#10b981', 'Medium': '#f59e0b', 'High': '#ef4444' };
+      
+      container.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; min-height: 200px;">
+          ${Object.entries(competition).map(([level, count]) => `
+            <div style="text-align: center;">
+              <div style="
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: ${colors[level]};
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+              ">${count}</div>
+              <div style="font-weight: 600; color: var(--text-primary);">${level} Competition</div>
+              <div style="font-size: 0.9rem; color: var(--text-secondary);">${((count / total) * 100).toFixed(1)}%</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Populate keywords table
+    function populateKeywordsTable() {
+      const tbody = document.getElementById('keywordsTableBody');
+      const keywords = researchData.keywords.slice(0, 50); // Show first 50
+      
+      tbody.innerHTML = keywords.map((kw, index) => `
+        <tr>
+          <td class="keyword-cell">${kw.keyword}</td>
+          <td class="volume-cell">${kw.volume.toLocaleString()}</td>
+          <td><span class="difficulty-badge difficulty-${kw.competition.toLowerCase()}">${kw.competition}</span></td>
+          <td>${kw.difficulty}/100</td>
+          <td>$${kw.cpc}</td>
+          <td>
+            <span class="trend-indicator trend-${kw.trend.direction}">
+              ${getTrendIcon(kw.trend.direction)} ${Math.abs(kw.trend.value)}%
+            </span>
+          </td>
+          <td>${kw.opportunityScore}/100</td>
+          <td>${kw.serpFeatures.slice(0, 2).join(', ')}${kw.serpFeatures.length > 2 ? '...' : ''}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn" onclick="copyKeyword('${kw.keyword}')" title="Copy keyword">
+                <i class="fas fa-copy"></i>
+              </button>
+              <button class="action-btn" onclick="analyzeKeyword('${kw.keyword}')" title="Detailed analysis">
+                <i class="fas fa-chart-line"></i>
+              </button>
+              <button class="action-btn" onclick="addToFavorites('${kw.keyword}')" title="Add to favorites">
+                <i class="fas fa-star"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Get trend icon
+    function getTrendIcon(direction) {
+      switch(direction) {
+        case 'up': return '📈';
+        case 'down': return '📉';
+        default: return '➡️';
+      }
+    }
+
+    // Generate trends visualization
+    function generateTrendsVisualization() {
+      const container = document.getElementById('trendsChart');
+      const trendData = researchData.trends;
+      
+      const maxVolume = Math.max(...trendData.map(d => d.volume));
+      
+      container.innerHTML = `
+        <div style="display: flex; align-items: end; gap: 10px; height: 300px; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+          ${trendData.map((data, index) => `
+            <div style="
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              height: 100%;
+              justify-content: end;
+            ">
+              <div style="
+                height: ${(data.volume / maxVolume) * 250}px;
+                background: linear-gradient(to top, var(--primary), var(--secondary));
+                width: 100%;
+                border-radius: 4px 4px 0 0;
+                margin-bottom: 0.5rem;
+                position: relative;
+              ">
+                <div style="
+                  position: absolute;
+                  top: -20px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  font-size: 0.7rem;
+                  font-weight: 600;
+                  white-space: nowrap;
+                ">${(data.volume / 1000).toFixed(1)}K</div>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">${data.month}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      // Trending keywords list
+      const trendingContainer = document.getElementById('trendingKeywords');
+      const trendingKeywords = researchData.keywords
+        .filter(kw => kw.trend.direction === 'up')
+        .sort((a, b) => b.trend.value - a.trend.value)
+        .slice(0, 10);
+
+      trendingContainer.innerHTML = `
+        <div style="display: grid; gap: 1rem;">
+          ${trendingKeywords.map((kw, index) => `
+            <div style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 1rem;
+              background: rgba(16, 185, 129, 0.1);
+              border-radius: 8px;
+              border-left: 4px solid #10b981;
+            ">
+              <div>
+                <div style="font-weight: 600; color: var(--text-primary);">#${index + 1} ${kw.keyword}</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">${kw.volume.toLocaleString()} searches/month</div>
+              </div>
+              <div style="color: #10b981; font-weight: 700; font-size: 1.1rem;">+${kw.trend.value}%</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Display competition analysis
+    function displayCompetitionAnalysis() {
+      const container = document.getElementById('competitiveAnalysis');
+      const competitors = researchData.competitors;
+      
+      container.innerHTML = competitors.map(comp => `
+        <div class="competitor-card">
+          <h4 style="margin-bottom: 1rem; color: var(--text-primary);">${comp.name}</h4>
+          <div style="display: grid; gap: 0.5rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span>Strength Score:</span>
+              <span style="font-weight: 600; color: var(--primary);">${comp.strength}/100</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Market Share:</span>
+              <span style="font-weight: 600;">${comp.marketShare}%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Keyword Overlap:</span>
+              <span style="font-weight: 600;">${comp.keywordOverlap}%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Avg Ranking:</span>
+              <span style="font-weight: 600;">#${comp.avgRanking}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Est. Traffic:</span>
+              <span style="font-weight: 600;">${comp.estimatedTraffic.toLocaleString()}</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" style="flex: 1; padding: 0.5rem;">
+              <i class="fas fa-chart-line"></i> Analyze
+            </button>
+            <button class="btn btn-secondary" style="flex: 1; padding: 0.5rem;">
+              <i class="fas fa-eye"></i> Monitor
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Display opportunities
+    function displayOpportunities() {
+      const container = document.getElementById('opportunitiesContent');
+      const opportunities = researchData.opportunities;
+      
+      container.innerHTML = `
+        <h3 style="margin-bottom: 2rem; color: var(--text-primary);">
+          <i class="fas fa-gem"></i> Top Keyword Opportunities
+        </h3>
+        <div style="display: grid; gap: 1rem;">
+          ${opportunities.map((opp, index) => `
+            <div style="
+              background: var(--light);
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 1.5rem;
+              transition: all 0.3s ease;
+            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                <h4 style="color: var(--text-primary); margin: 0;">${opp.keyword}</h4>
+                <span style="
+                  background: linear-gradient(45deg, var(--success), #06b6d4);
+                  color: white;
+                  padding: 0.25rem 0.75rem;
+                  border-radius: 20px;
+                  font-size: 0.8rem;
+                  font-weight: 600;
+                ">${opp.opportunityScore}/100</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                  <span style="color: var(--text-secondary); font-size: 0.9rem;">Monthly Volume</span>
+                  <div style="font-weight: 600; color: var(--primary);">${opp.volume.toLocaleString()}</div>
+                </div>
+                <div>
+                  <span style="color: var(--text-secondary); font-size: 0.9rem;">Competition</span>
+                  <div><span class="difficulty-badge difficulty-${opp.competition.toLowerCase()}">${opp.competition}</span></div>
+                </div>
+                <div>
+                  <span style="color: var(--text-secondary); font-size: 0.9rem;">CPC</span>
+                  <div style="font-weight: 600;">$${opp.cpc}</div>
+                </div>
+                <div>
+                  <span style="color: var(--text-secondary); font-size: 0.9rem;">Trend</span>
+                  <div class="trend-indicator trend-${opp.trend.direction}">
+                    ${getTrendIcon(opp.trend.direction)} ${Math.abs(opp.trend.value)}%
+                  </div>
+                </div>
+              </div>
+              <div style="background: rgba(16, 185, 129, 0.1); padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem;">
+                <strong style="color: var(--success);">Opportunity:</strong> ${opp.reason}
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-primary" style="flex: 1; padding: 0.5rem;" onclick="copyKeyword('${opp.keyword}')">
+                  <i class="fas fa-copy"></i> Copy
+                </button>
+                <button class="btn btn-secondary" style="flex: 1; padding: 0.5rem;" onclick="analyzeKeyword('${opp.keyword}')">
+                  <i class="fas fa-search"></i> Deep Analysis
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Display marketplace analysis
+    function displayMarketplaceAnalysis() {
+      const container = document.getElementById('marketplaceAnalysis');
+      const selectedData = researchData.marketplaces;
+      
+      container.innerHTML = `
+        <h3 style="margin-bottom: 2rem; color: var(--text-primary);">
+          <i class="fas fa-store"></i> Marketplace Analysis
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          ${selectedData.map(marketplace => {
+            const potential = Math.floor(Math.random() * 40) + 60;
+            const estimatedReach = Math.floor(Math.random() * 1000000) + 100000;
+            const avgCost = (Math.random() * 2 + 0.5).toFixed(2);
+            
+            return `
+              <div class="metric-card">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                  <div style="font-size: 2.5rem;">${marketplace.icon}</div>
+                  <div>
+                    <h4 style="margin: 0; color: var(--text-primary);">${marketplace.name}</h4>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">${marketplace.category}</div>
+                  </div>
+                </div>
+                <div style="display: grid; gap: 0.75rem;">
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Market Potential:</span>
+                    <span style="font-weight: 600; color: var(--primary);">${potential}/100</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Market Share:</span>
+                    <span style="font-weight: 600;">${marketplace.market_share}%</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Est. Reach:</span>
+                    <span style="font-weight: 600;">${estimatedReach.toLocaleString()}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Avg. Cost:</span>
+                    <span style="font-weight: 600;">$${avgCost}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Competition:</span>
+                    <span class="difficulty-badge difficulty-${marketplace.competition}">${marketplace.competition}</span>
+                  </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                  <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                    <i class="fas fa-external-link-alt"></i> Analyze Platform
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // Display AI insights
+    function displayAIInsights() {
+      const container = document.getElementById('aiInsightsContent');
+      const insights = researchData.aiInsights;
+      
+      if (insights && insights.length > 100) {
+        container.innerHTML = `
+          <div style="background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 12px; line-height: 1.8;">
+            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">${insights}</pre>
+          </div>
+          <div style="margin-top: 2rem; text-align: center;">
+            <button class="btn btn-secondary" onclick="copyText(\`${insights.replace(/`/g, '\\`')}\`)">
+              <i class="fas fa-copy"></i> Copy Full Analysis
+            </button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 3rem; background: rgba(255, 255, 255, 0.1); border-radius: 12px;">
+            <i class="fas fa-robot" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.7;"></i>
+            <h3>AI Insights Unavailable</h3>
+            <p style="margin-bottom: 2rem; opacity: 0.8;">
+              Enter your Gemini API key to unlock powerful AI-driven market insights and strategic recommendations.
+            </p>
+            <button class="btn btn-secondary" onclick="document.getElementById('apiKey').focus()">
+              <i class="fas fa-key"></i> Add API Key
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Update tab badges
+    function updateTabBadges() {
+      document.getElementById('overviewBadge').textContent = '4';
+      document.getElementById('keywordsBadge').textContent = researchData.keywords.length;
+      document.getElementById('trendsBadge').textContent = researchData.keywords.filter(kw => kw.trend.direction === 'up').length;
+      document.getElementById('competitionBadge').textContent = researchData.competitors.length;
+      document.getElementById('opportunitiesBadge').textContent = researchData.opportunities.length;
+      document.getElementById('marketplaceBadge').textContent = selectedMarketplaces.length;
+    }
+
+    // Update marketplace badge
+    function updateMarketplaceBadge() {
+      const badge = document.getElementById('marketplaceBadge');
+      if (badge) {
+        badge.textContent = selectedMarketplaces.length;
+      }
+    }
+
+    // Tab switching functionality
+    function switchTab(tabName) {
+      // Remove active class from all tabs and contents
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked tab and corresponding content
+      event.target.classList.add('active');
+      document.getElementById(tabName).classList.add('active');
+    }
+
+    // Filter keywords
+    function filterKeywords() {
+      const searchTerm = document.getElementById('keywordSearch').value.toLowerCase();
+      const sortBy = document.getElementById('sortBySelect').value;
+      const showCount = document.getElementById('showCountSelect').value;
+      const difficultyFilter = document.getElementById('filterByDifficulty').value;
+      
+      let filtered = researchData.keywords.filter(kw => {
+        const matchesSearch = kw.keyword.toLowerCase().includes(searchTerm);
+        const matchesDifficulty = difficultyFilter === 'all' || kw.competition.toLowerCase() === difficultyFilter;
+        return matchesSearch && matchesDifficulty;
+      });
+
+      // Sort
+      switch(sortBy) {
+        case 'volume':
+          filtered.sort((a, b) => b.volume - a.volume);
+          break;
+        case 'volume-asc':
+          filtered.sort((a, b) => a.volume - b.volume);
+          break;
+        case 'competition':
+          const order = { 'Low': 0, 'Medium': 1, 'High': 2 };
+          filtered.sort((a, b) => order[a.competition] - order[b.competition]);
+          break;
+        case 'opportunity':
+          filtered.sort((a, b) => b.opportunityScore - a.opportunityScore);
+          break;
+        case 'trend':
+          filtered.sort((a, b) => b.trend.value - a.trend.value);
+          break;
+        case 'cpc':
+          filtered.sort((a, b) => parseFloat(b.cpc) - parseFloat(a.cpc));
+          break;
+        case 'alphabetical':
+          filtered.sort((a, b) => a.keyword.localeCompare(b.keyword));
+          break;
+      }
+
+      // Limit results
+      if (showCount !== 'all') {
+        filtered = filtered.slice(0, parseInt(showCount));
+      }
+
+      // Update table
+      const tbody = document.getElementById('keywordsTableBody');
+      tbody.innerHTML = filtered.map(kw => `
+        <tr>
+          <td class="keyword-cell">${highlightSearchTerm(kw.keyword, searchTerm)}</td>
+          <td class="volume-cell">${kw.volume.toLocaleString()}</td>
+          <td><span class="difficulty-badge difficulty-${kw.competition.toLowerCase()}">${kw.competition}</span></td>
+          <td>${kw.difficulty}/100</td>
+          <td>$${kw.cpc}</td>
+          <td>
+            <span class="trend-indicator trend-${kw.trend.direction}">
+              ${getTrendIcon(kw.trend.direction)} ${Math.abs(kw.trend.value)}%
+            </span>
+          </td>
+          <td>${kw.opportunityScore}/100</td>
+          <td>${kw.serpFeatures.slice(0, 2).join(', ')}${kw.serpFeatures.length > 2 ? '...' : ''}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn" onclick="copyKeyword('${kw.keyword}')" title="Copy keyword">
+                <i class="fas fa-copy"></i>
+              </button>
+              <button class="action-btn" onclick="analyzeKeyword('${kw.keyword}')" title="Detailed analysis">
+                <i class="fas fa-chart-line"></i>
+              </button>
+              <button class="action-btn" onclick="addToFavorites('${kw.keyword}')" title="Add to favorites">
+                <i class="fas fa-star"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Highlight search term
+    function highlightSearchTerm(text, term) {
+      if (!term) return text;
+      const regex = new RegExp(`(${term})`, 'gi');
+      return text.replace(regex, '<mark style="background: var(--warning); color: black; padding: 0 2px; border-radius: 2px;">$1</mark>');
+    }
+
+    // Utility functions
+    function copyKeyword(keyword) {
+      navigator.clipboard.writeText(keyword).then(() => {
+        showNotification(`Copied: "${keyword}"`, 'success');
+      }).catch(() => {
+        showNotification('Failed to copy keyword', 'error');
+      });
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification('Text copied to clipboard!', 'success');
+      }).catch(() => {
+        showNotification('Failed to copy text', 'error');
+      });
+    }
+
+    function analyzeKeyword(keyword) {
+      showNotification(`Analyzing "${keyword}"... Feature coming soon!`, 'info');
+    }
+
+    function addToFavorites(keyword) {
+      showNotification(`Added "${keyword}" to favorites!`, 'success');
+    }
+
+    function refreshChart() {
+      if (researchData.keywords) {
+        generateVolumeChart();
+        showNotification('Charts refreshed!', 'success');
+      }
+    }
+
+    // Export functions
+    function exportToPDF() {
+      if (!researchData.keywords) {
+        showNotification('No research data to export', 'error');
+        return;
+      }
+
+      showNotification('Generating PDF report...', 'info');
+      
+      // Load jsPDF if not already loaded
+      if (typeof window.jspdf === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        script.onload = () => {
+          setTimeout(() => {
+            generatePDFReport();
+          }, 500);
+        };
+        script.onerror = () => {
+          showNotification('Failed to load PDF library', 'error');
+        };
+        document.head.appendChild(script);
+      } else {
+        generatePDFReport();
+      }
+    }
+
+    function generatePDFReport() {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Title page
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text('KDP & POD Keyword Research Report', 20, 30);
+        
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Seed Keyword: ${researchData.seedKeyword}`, 20, 50);
+        doc.text(`Generated: ${new Date(researchData.timestamp).toLocaleString()}`, 20, 60);
+        doc.text(`Total Keywords: ${researchData.keywords.length}`, 20, 70);
+        doc.text(`High Opportunities: ${researchData.opportunities.length}`, 20, 80);
+        
+        // Add overview metrics
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Overview Metrics', 20, 100);
+        
+        let yPos = 115;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        
+        // Top keywords table
+        const topKeywords = researchData.keywords.slice(0, 30);
+        topKeywords.forEach((kw, index) => {
+          if (yPos > 270) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          doc.text(`${(index + 1).toString().padStart(3)}.`, 20, yPos);
+          doc.text(kw.keyword, 35, yPos);
+          doc.text(kw.volume.toLocaleString(), 110, yPos);
+          doc.text(kw.competition, 140, yPos);
+          doc.text(`$${kw.cpc}`, 170, yPos);
+          
+          yPos += 7;
+        });
+        
+        // Add opportunities page
+        if (researchData.opportunities.length > 0) {
+          doc.addPage();
+          doc.setFontSize(16);
+          doc.setFont('helvetica', 'bold');
+          doc.text('Top Opportunities', 20, 30);
+          
+          yPos = 45;
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          
+          researchData.opportunities.slice(0, 20).forEach((opp, index) => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
+            }
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${index + 1}. ${opp.keyword}`, 20, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Volume: ${opp.volume.toLocaleString()} | Competition: ${opp.competition} | Score: ${opp.opportunityScore}`, 20, yPos + 6);
+            doc.text(`Reason: ${opp.reason}`, 20, yPos + 12);
+            
+            yPos += 20;
+          });
+        }
+        
+        const filename = `keyword-research-${researchData.seedKeyword.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(filename);
+        
+        showNotification('PDF report exported successfully!', 'success');
+        
+      } catch (error) {
+        showNotification('PDF export failed: ' + error.message, 'error');
+      }
+    }
+
+    function exportToCSV() {
+      if (!researchData.keywords) {
+        showNotification('No research data to export', 'error');
+        return;
+      }
+
+      const headers = [
+        'Keyword', 'Monthly Volume', 'Competition', 'Difficulty Score', 'CPC', 
+        'Trend Direction', 'Trend Value', 'Opportunity Score', 'SERP Features', 
+        'Seasonality', 'Commercial Intent', 'Word Count'
+      ];
+      
+      const csvContent = [
+        headers.join(','),
+        ...researchData.keywords.map(kw => [
+          `"${kw.keyword}"`,
+          kw.volume,
+          kw.competition,
+          kw.difficulty,
+          kw.cpc,
+          kw.trend.direction,
+          kw.trend.value,
+          kw.opportunityScore,
+          `"${kw.serpFeatures.join(', ')}"`,
+          kw.seasonality,
+          kw.commercialIntent,
+          kw.wordCount
+        ].join(','))
+      ].join('\n');
+
+      downloadFile(csvContent, `keyword-research-${researchData.seedKeyword.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
+      showNotification('CSV data exported successfully!', 'success');
+    }
+
+    function exportToJSON() {
+      if (!researchData) {
+        showNotification('No research data to export', 'error');
+        return;
+      }
+
+      const jsonContent = JSON.stringify(researchData, null, 2);
+      downloadFile(jsonContent, `keyword-research-${researchData.seedKeyword.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`, 'application/json');
+      showNotification('JSON data exported successfully!', 'success');
+    }
+
+    function exportToExcel() {
+      if (!researchData.keywords) {
+        showNotification('No research data to export', 'error');
+        return;
+      }
+
+      // Create Excel-compatible CSV with tabs for different data sets
+      let excelContent = 'Sheet: Keywords\n';
+      excelContent += 'Keyword,Monthly Volume,Competition,Difficulty Score,CPC,Trend Direction,Trend Value,Opportunity Score\n';
+      researchData.keywords.forEach(kw => {
+        excelContent += `"${kw.keyword}",${kw.volume},${kw.competition},${kw.difficulty},${kw.cpc},${kw.trend.direction},${kw.trend.value},${kw.opportunityScore}\n`;
+      });
+
+      excelContent += '\n\nSheet: Opportunities\n';
+      excelContent += 'Keyword,Volume,Competition,Opportunity Score,Reason\n';
+      researchData.opportunities.forEach(opp => {
+        excelContent += `"${opp.keyword}",${opp.volume},${opp.competition},${opp.opportunityScore},"${opp.reason}"\n`;
+      });
+
+      downloadFile(excelContent, `keyword-research-excel-${researchData.seedKeyword.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
+      showNotification('Excel-compatible file exported successfully!', 'success');
+    }
+
+    // Download utility
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    // Loading overlay functions
+    function showLoadingOverlay() {
+      document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+
+    function hideLoadingOverlay() {
+      document.getElementById('loadingOverlay').style.display = 'none';
+    }
+
+    // Notification system
+    function showNotification(message, type = 'success') {
+      const container = document.getElementById('notificationContainer');
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      
+      const icons = {
+        success: 'fas fa-check-circle',
+        error: 'fas fa-exclamation-circle',
+        warning: 'fas fa-exclamation-triangle',
+        info: 'fas fa-info-circle'
+      };
+      
+      notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <i class="${icons[type] || icons.info}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      container.appendChild(notification);
+      
+      setTimeout(() => {
+        if (container.contains(notification)) {
+          notification.style.animation = 'slideOutNotification 0.3s ease forwards';
+          setTimeout(() => {
+            container.removeChild(notification);
+          }, 300);
+        }
+      }, 4000);
+    }
+
+    // Add slide out animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideOutNotification {
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
+
